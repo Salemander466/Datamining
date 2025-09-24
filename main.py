@@ -181,11 +181,29 @@ def main():
 
     for model_name, res in results.items():
         best_params = res["best_params"]
+
+        # Cross-validation on folds 1–4
         mean_cv_score = runner.cv_with_best_params(model_name, best_params, X_train, y_train)
+
+        # Evaluate locked model on fold 5
+        eval_res = evaluate_model(
+            runner.models[model_name],
+            X_test,
+            y_test,
+            class_names=class_names,
+            model_name=f"{model_name}_cv"
+        )
+
+        # Collect both CV + holdout results
         cv_results[model_name] = {
             "cv_f1_mean": mean_cv_score,
-            "best_params": best_params
+            "best_params": best_params,
+            "test_accuracy": eval_res["accuracy"],
+            "test_precision_macro": eval_res["precision_macro"],
+            "test_recall_macro": eval_res["recall_macro"],
+            "test_f1_macro": eval_res["f1_macro"],
         }
+
 
     # Save CV results
     cv_results_df = pd.DataFrame(cv_results).T

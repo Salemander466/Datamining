@@ -16,11 +16,7 @@ class ModelCVRunner:
         self.models = {}
 
     def cv_with_best_params(self, model_name, best_params, X_train, y_train):
-        """
-        Run CV with the best params found earlier.
-        Stores model in self.models[model_name].
-        Returns mean CV score.
-        """
+
         if model_name == "NaiveBayes":
             # build pipeline with feature selection
             k = best_params.get("select__k", "all")
@@ -66,7 +62,7 @@ class ModelCVRunner:
             model = GradientBoostingClassifier(
                 n_estimators=best_params.get("n_estimators", 100),
                 learning_rate=best_params.get("learning_rate", 0.1),
-                max_depth=best_params.get("max_depth", 3),
+                max_depth=best_params.get("max_depth", 3),  # if your sklearn supports it
                 random_state=42
             )
 
@@ -74,6 +70,11 @@ class ModelCVRunner:
             raise ValueError(f"Unknown model: {model_name}")
 
         # run cross-validation
-        scores = cross_val_score(model, X_train, y_train, cv=self.cv, scoring="f1")
+        scores = cross_val_score(model, X_train, y_train, cv=self.cv, scoring="f1_macro")
+
+        # Fit on all training folds so model is ready for fold 5
+        model.fit(X_train, y_train)
+
         self.models[model_name] = model
         return np.mean(scores)
+

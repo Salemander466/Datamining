@@ -9,9 +9,11 @@ from sklearn.metrics import (
     classification_report,
     confusion_matrix
 )
+import os
 
 
-def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, save_path=None):
+
+def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, model_name="Model"):
     # Predictions
     y_pred = model.predict(X_test)
 
@@ -25,7 +27,7 @@ def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, save_p
     }
 
     # Print summary
-    print("\n=== Evaluation Results ===")
+    print(f"\n=== Evaluation Results ({model_name}) ===")
     print(f"Accuracy:  {results['accuracy']:.4f}")
     print(f"Precision (macro): {results['precision_macro']:.4f}")
     print(f"Recall (macro):    {results['recall_macro']:.4f}")
@@ -42,9 +44,14 @@ def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, save_p
                     xticklabels=class_names, yticklabels=class_names)
         plt.xlabel("Predicted")
         plt.ylabel("True")
-        plt.title("Confusion Matrix")
-        if save_path:
-            plt.savefig(save_path, bbox_inches="tight")
-        plt.show()
+        plt.title(f"Confusion Matrix - {model_name}")
+
+        # === Save to CM/ folder ===
+        os.makedirs("CM", exist_ok=True)
+        save_path = os.path.join("CM", f"{model_name}_cm.png")
+        plt.savefig(save_path, bbox_inches="tight")
+        print(f"✅ Confusion matrix saved to {save_path}")
+
+        plt.close()
 
     return results
