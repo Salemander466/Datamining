@@ -1,0 +1,6 @@
+,cv_f1_mean,best_params
+NaiveBayes,0.8002070393374741,{'alpha': 0.1}
+LogisticRegression,0.7278773200812181,{'C': 1}
+DecisionTree,0.6271092734175899,"{'ccp_alpha': 0.01, 'max_depth': 5}"
+RandomForest,0.7109375,"{'max_depth': 20, 'max_features': 'log2', 'n_estimators': 200}"
+GradientBoosting,0.6801829854303617,"{'learning_rate': 0.01, 'max_depth': 5, 'n_estimators': 200}"
