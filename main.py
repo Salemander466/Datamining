@@ -78,14 +78,19 @@ def main():
 
 
     # Train on folds 1–4, test on fold 5
-    train_texts, train_labels = [], []
-    for f in ["fold1", "fold2", "fold3", "fold4"]:
-        texts, labels = folds[f]
-        train_texts.extend(texts)
-        train_labels.extend(labels)
 
-    # Test fold (5)
-    test_texts, test_labels = folds["fold5"]
+    train_texts, train_labels = load_data(
+        base=BASE_DIR,
+        folds=[1, 2, 3, 4]
+    )
+
+    # Test = fold 5
+    test_texts, test_labels = load_data(
+        base=BASE_DIR,
+        folds=[5]
+    )
+
+
 
     # Example split (replace with your fold logic)
     X_train_texts, X_test_texts, y_train, y_test = train_test_split(
