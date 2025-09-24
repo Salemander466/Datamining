@@ -2,6 +2,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from preprocessing import vectorize_text
 
 from model import NaiveBayesModel, LogisticRegressionModel, DecisionTreeModel, RandomForestModel, GradientBoostingModel
 from eval import evaluate_model
@@ -68,8 +69,9 @@ def main():
     # === Step 1: Load your folds ===
     BASE_DIR = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
-        "/Data/op_spam_v1.4/negative_polarity"
+        "Data/op_spam_v1.4/negative_polarity"
     )
+
 
     # === Step 1: Load folds ===
     folds = load_data(BASE_DIR)
@@ -78,29 +80,30 @@ def main():
     # Train on folds 1–4, test on fold 5
     train_texts, train_labels = [], []
     for f in ["fold1", "fold2", "fold3", "fold4"]:
-        X, y = folds[f]
-        train_texts.extend(X)
-        train_labels.extend(y)
+        texts, labels = folds[f]
+        train_texts.extend(texts)
+        train_labels.extend(labels)
 
+    # Test fold (5)
     test_texts, test_labels = folds["fold5"]
 
-#     # Example split (replace with your fold logic)
-#     X_train_texts, X_test_texts, y_train, y_test = train_test_split(
-#         texts, labels, test_size=0.2, random_state=42, stratify=labels
-#     )
+    # Example split (replace with your fold logic)
+    X_train_texts, X_test_texts, y_train, y_test = train_test_split(
+        test_texts, test_labels, test_size=0.2, random_state=42, stratify=test_labels
+    )
 
-#     # === Step 2: Preprocess ===
-#     X_train, X_test, vectorizer = preprocess(X_train_texts, X_test_texts, use_bigrams=False)
+    # === Step 2: Preprocess ===
+    X_train, X_test, vectorizer = vectorize_text(X_train_texts, X_test_texts, use_bigrams=False)
 
-#     # === Step 3: Train + Evaluate ===
-#     class_names = ["truthful", "deceptive"]  # adjust as needed
-#     results = run_all_models(X_train, y_train, X_test, y_test, class_names)
+    # === Step 3: Train + Evaluate ===
+    class_names = ["truthful", "deceptive"]  # adjust as needed
+    results = run_all_models(X_train, y_train, X_test, y_test, class_names)
 
-#     # === Step 4: Store Results ===
-#     results_df = pd.DataFrame(results).T
-#     results_df.to_csv("results_summary.csv")
-#     print("\nFinal results saved to results_summary.csv")
+    # === Step 4: Store Results ===
+    results_df = pd.DataFrame(results).T
+    results_df.to_csv("results_summary.csv")
+    print("\nFinal results saved to results_summary.csv")
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
