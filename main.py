@@ -6,30 +6,7 @@ import pandas as pd
 from model import NaiveBayesModel, LogisticRegressionModel, DecisionTreeModel, RandomForestModel, GradientBoostingModel
 from eval import evaluate_model
 import os
-
-def load_data(base_path):
-
-    folds = {}
-    classes = {
-        "truthful_from_TripAdvisor": 0,   # label 0 = truthful
-        "deceptive_from_MTurk": 1        # label 1 = deceptive
-    }
-
-    for cls, label in classes.items():
-        cls_path = os.path.join(base_path, cls)
-        for fold in sorted(os.listdir(cls_path)):
-            fold_path = os.path.join(cls_path, fold)
-            if not os.path.isdir(fold_path):
-                continue
-            texts, labels = folds.get(fold, ([], []))
-            for fname in os.listdir(fold_path):
-                if fname.endswith(".txt"):
-                    with open(os.path.join(fold_path, fname), "r", encoding="utf-8") as f:
-                        texts.append(f.read().strip())
-                        labels.append(label)
-            folds[fold] = (texts, labels)
-
-    return folds
+from utils import load_data
 
 def preprocess(train_texts, test_texts, use_bigrams=False):
 
@@ -97,6 +74,7 @@ def main():
     # === Step 1: Load folds ===
     folds = load_data(BASE_DIR)
 
+
     # Train on folds 1–4, test on fold 5
     train_texts, train_labels = [], []
     for f in ["fold1", "fold2", "fold3", "fold4"]:
@@ -106,23 +84,23 @@ def main():
 
     test_texts, test_labels = folds["fold5"]
 
-    # Example split (replace with your fold logic)
-    X_train_texts, X_test_texts, y_train, y_test = train_test_split(
-        texts, labels, test_size=0.2, random_state=42, stratify=labels
-    )
+#     # Example split (replace with your fold logic)
+#     X_train_texts, X_test_texts, y_train, y_test = train_test_split(
+#         texts, labels, test_size=0.2, random_state=42, stratify=labels
+#     )
 
-    # === Step 2: Preprocess ===
-    X_train, X_test, vectorizer = preprocess(X_train_texts, X_test_texts, use_bigrams=False)
+#     # === Step 2: Preprocess ===
+#     X_train, X_test, vectorizer = preprocess(X_train_texts, X_test_texts, use_bigrams=False)
 
-    # === Step 3: Train + Evaluate ===
-    class_names = ["truthful", "deceptive"]  # adjust as needed
-    results = run_all_models(X_train, y_train, X_test, y_test, class_names)
+#     # === Step 3: Train + Evaluate ===
+#     class_names = ["truthful", "deceptive"]  # adjust as needed
+#     results = run_all_models(X_train, y_train, X_test, y_test, class_names)
 
-    # === Step 4: Store Results ===
-    results_df = pd.DataFrame(results).T
-    results_df.to_csv("results_summary.csv")
-    print("\nFinal results saved to results_summary.csv")
+#     # === Step 4: Store Results ===
+#     results_df = pd.DataFrame(results).T
+#     results_df.to_csv("results_summary.csv")
+#     print("\nFinal results saved to results_summary.csv")
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
