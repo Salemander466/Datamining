@@ -8,7 +8,7 @@ from preprocessing import vectorize_text
 from model2 import NaiveBayesModel, LogisticRegressionModel, DecisionTreeModel, RandomForestModel, GradientBoostingModel
 from eval import evaluate_model
 import os
-from utils import load_data
+from utils import load_data, save_cv_results_and_histograms
 
 def preprocess(train_texts, test_texts, use_bigrams=False):
 
@@ -154,7 +154,7 @@ def run_all_models(X_train, y_train, X_test, y_test, class_names):
 #         folds=[5]
 #     )
 
-    
+
 
 
 
@@ -282,11 +282,12 @@ def main():
                 "test_f1_macro": eval_res["f1_macro"],
             }
 
+
         # Save CV results
         cv_results_df = pd.DataFrame(cv_results).T
         cv_results_df.to_csv(f"cv_results_summary_{suffix}.csv")
         print(f"✅ Cross-validation results saved to cv_results_summary_{suffix}.csv")
-
+        save_cv_results_and_histograms(cv_results, suffix)
 
 if __name__ == "__main__":
     main()
