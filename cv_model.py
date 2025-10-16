@@ -1,4 +1,3 @@
-# cv_pipeline.py
 import numpy as np
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.pipeline import Pipeline
@@ -40,7 +39,7 @@ class ModelCVRunner:
 
         elif model_name == "RandomForest":
             if self.use_oob_rf:
-                #OOB evaluation
+                #OOB(out of bag) evaluation
                 model = RandomForestClassifier(
                     n_estimators=best_params.get("n_estimators", 200),
                     max_features=best_params.get("max_features", "sqrt"),
