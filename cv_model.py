@@ -18,7 +18,7 @@ class ModelCVRunner:
     def cv_with_best_params(self, model_name, best_params, X_train, y_train):
 
         if model_name == "NaiveBayes":
-            # build pipeline with feature selection
+            #build pipeline with feature selection
             k = best_params.get("select__k", "all")
             alpha = best_params.get("nb__alpha", 1.0)
             model = Pipeline([
@@ -40,7 +40,7 @@ class ModelCVRunner:
 
         elif model_name == "RandomForest":
             if self.use_oob_rf:
-                # OOB evaluation
+                #OOB evaluation
                 model = RandomForestClassifier(
                     n_estimators=best_params.get("n_estimators", 200),
                     max_features=best_params.get("max_features", "sqrt"),
@@ -62,17 +62,17 @@ class ModelCVRunner:
             model = GradientBoostingClassifier(
                 n_estimators=best_params.get("n_estimators", 100),
                 learning_rate=best_params.get("learning_rate", 0.1),
-                max_depth=best_params.get("max_depth", 3),  # if your sklearn supports it
+                max_depth=best_params.get("max_depth", 3),
                 random_state=42
             )
 
         else:
             raise ValueError(f"Unknown model: {model_name}")
 
-        # run cross-validation
+        #Run cross-validation
         scores = cross_val_score(model, X_train, y_train, cv=self.cv, scoring="f1_macro")
 
-        # Fit on all training folds so model is ready for fold 5
+        #Fit on all training folds so model is ready for fold 5
         model.fit(X_train, y_train)
 
         self.models[model_name] = model

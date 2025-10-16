@@ -22,6 +22,7 @@ class NaiveBayesModel:
 
     def tune(self, X_train, y_train, param_distributions=None, cv=3, n_iter=10):
         if param_distributions is None:
+            #Hyper Parameters
             param_distributions = {
                 "alpha": np.linspace(0.1, 2.0, 10),
             }
@@ -56,6 +57,7 @@ class LogisticRegressionModel:
 
     def tune(self, X_train, y_train, param_distributions=None, cv=3, n_iter=10):
         if param_distributions is None:
+            #Hyper Parameters
             param_distributions = {"C": np.logspace(-2, 2, 20)}
         rs = RandomizedSearchCV(
             LogisticRegression(penalty="l1", solver="liblinear", max_iter=1000),
@@ -86,6 +88,7 @@ class DecisionTreeModel:
 
     def tune(self, X_train, y_train, param_distributions=None, cv=3, n_iter=10):
         if param_distributions is None:
+            #Hyper Parameters
             param_distributions = {
                 "max_depth": [None, 5, 10, 20],
                 "ccp_alpha": np.linspace(0.0, 0.02, 5),
@@ -124,6 +127,7 @@ class RandomForestModel:
 
     def tune(self, X_train, y_train, param_distributions=None, cv=3, n_iter=15):
         if param_distributions is None:
+            #Hyper Parameters
             param_distributions = {
                 "n_estimators": [100, 200],
                 "max_features": ["sqrt", "log2", None],
@@ -163,6 +167,7 @@ class GradientBoostingModel:
 
     def tune(self, X_train, y_train, param_distributions=None, cv=3, n_iter=15):
         if param_distributions is None:
+            #Hyper Parameters
             param_distributions = {
                 "n_estimators": [100, 200],
                 "learning_rate": [0.01, 0.05, 0.1],

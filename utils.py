@@ -2,6 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+
 def load_data(base="data\\op_spam_v1.4\\negative_polarity", folds=[1,2,3,4]):
     texts = []
     labels = []
@@ -27,11 +28,9 @@ def load_data(base="data\\op_spam_v1.4\\negative_polarity", folds=[1,2,3,4]):
 
 def save_cv_results_and_histograms(cv_results, suffix=""):
 
-    # Create main output directory
+    #Create main output directory
     output_dir = f"cv_analysis_{suffix}"
     os.makedirs(output_dir, exist_ok=True)
-
-    # Convert results to DataFrame
     if isinstance(cv_results, dict):
         cv_results_df = pd.DataFrame(cv_results).T
     else:
@@ -41,8 +40,6 @@ def save_cv_results_and_histograms(cv_results, suffix=""):
     csv_path = os.path.join(output_dir, f"cv_results_summary_{suffix}.csv")
     cv_results_df.to_csv(csv_path)
     print(f"Cross-validation results saved to {csv_path}")
-
-    # Metrics to visualize
     metrics = [
         "cv_f1_mean",
         "test_accuracy",
@@ -51,27 +48,28 @@ def save_cv_results_and_histograms(cv_results, suffix=""):
         "test_f1_macro",
     ]
 
-    # Plot style
+    #Plot style
     sns.set(style="whitegrid", context="talk")
 
-    # Create subfolder for histograms
+    #Create subfolder for histograms
     hist_folder = os.path.join(output_dir, "histograms")
     os.makedirs(hist_folder, exist_ok=True)
 
     for metric in metrics:
         if metric not in cv_results_df.columns:
             continue
-
         data = cv_results_df[metric].dropna()
 
         plt.figure(figsize=(8, 6))
         sns.histplot(data, bins=10, kde=True, color="steelblue", edgecolor="black")
 
+
+
         plt.title(f"{metric.replace('_', ' ').title()} Across Models", fontsize=16, weight="bold")
         plt.xlabel(metric.replace('_', ' ').title(), fontsize=13)
         plt.ylabel("Number of Models", fontsize=13)
 
-        # Summary statistics
+        #Summary statistics
         mean_val = data.mean()
         median_val = data.median()
         std_val = data.std()
@@ -95,11 +93,6 @@ def save_cv_results_and_histograms(cv_results, suffix=""):
 
     print(f"Histograms saved to {hist_folder}")
     print("Each histogram shows how models compare in terms of the selected metric.")
-
-# Example usage:
-
-
-
 
 
 

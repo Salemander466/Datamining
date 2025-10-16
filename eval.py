@@ -17,7 +17,7 @@ def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, model_
     # Predictions
     y_pred = model.predict(X_test)
 
-    # Metrics
+    #Performance Metrics
     results = {
         "accuracy": accuracy_score(y_test, y_pred),
         "precision_macro": precision_score(y_test, y_pred, average="macro"),
@@ -26,7 +26,6 @@ def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, model_
         "report": classification_report(y_test, y_pred, target_names=class_names, output_dict=True)
     }
 
-    # Print summary
     print(f"\n=== Evaluation Results ({model_name}) ===")
     print(f"Accuracy:  {results['accuracy']:.4f}")
     print(f"Precision (macro): {results['precision_macro']:.4f}")
@@ -36,7 +35,7 @@ def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, model_
     print("Per-class metrics:")
     print(classification_report(y_test, y_pred, target_names=class_names))
 
-    # Confusion Matrix
+    #Confusion Matrix
     cm = confusion_matrix(y_test, y_pred)
     if plot_cm:
         plt.figure(figsize=(5, 4))
@@ -45,8 +44,6 @@ def evaluate_model(model, X_test, y_test, class_names=None, plot_cm=True, model_
         plt.xlabel("Predicted")
         plt.ylabel("True")
         plt.title(f"Confusion Matrix - {model_name}")
-
-        # === Save to CM/ folder ===
         os.makedirs("CM", exist_ok=True)
         save_path = os.path.join("CM", f"{model_name}_cm.png")
         plt.savefig(save_path, bbox_inches="tight")
