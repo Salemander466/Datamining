@@ -1,17 +1,11 @@
 ## Requirements
-
 Install dependencies using:
-
 ``` bash
-
 pip install -r requirements.txt
 ```
 
-
 ## How to Run
-
 ``` bash
-
 python main.py
 ```
 
@@ -25,7 +19,6 @@ This will:
 5. Save confision matrices to `CM/` folder
 
 ## Outputs
-
 - **CSV Summaries** of performance (accuracy, precision, recall, F1, best, hyperparameters)
 - **Confusion matrices** saves as `.png`
 - **Console logs** of metrics and per-class performance
