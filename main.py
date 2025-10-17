@@ -4,7 +4,7 @@ import pandas as pd
 from cv_model import ModelCVRunner
 from preprocessing import vectorize_text
 
-from model2 import NaiveBayesModel, LogisticRegressionModel, DecisionTreeModel, RandomForestModel, GradientBoostingModel
+from model import NaiveBayesModel, LogisticRegressionModel, DecisionTreeModel, RandomForestModel, GradientBoostingModel
 from eval import evaluate_model
 import os
 from utils import load_data, save_cv_results_and_histograms
